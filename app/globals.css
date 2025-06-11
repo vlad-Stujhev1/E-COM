@@ -1,0 +1,333 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Минималистичная цифровая система */
+:root {
+  --lime: #d2ff1c;
+  --lime-soft: #e8ff66;
+  --black: #000000;
+  --white: #ffffff;
+  --grey: #f5f5f5;
+  --grey-dark: #666666;
+  --grey-light: #fafafa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+
+/* Базовые компоненты */
+.vs-button {
+  @apply font-medium text-sm px-6 py-3 rounded-lg transition-all duration-200;
+  @apply bg-lime text-black hover:bg-lime-soft;
+  @apply active:scale-95 disabled:opacity-50;
+  @apply min-h-[44px] flex items-center justify-center;
+}
+
+.vs-button-secondary {
+  @apply bg-grey text-black hover:bg-grey-dark hover:text-white;
+}
+
+.vs-button-outline {
+  @apply bg-white border border-grey-dark text-black;
+  @apply hover:border-black hover:bg-grey-light;
+}
+
+.vs-card {
+  @apply bg-white rounded-lg border border-grey;
+  @apply transition-all duration-200;
+}
+
+.vs-card:hover {
+  @apply shadow-medium border-grey-dark;
+}
+
+.vs-input {
+  @apply w-full px-4 py-3 rounded-lg border border-grey;
+  @apply bg-white text-black placeholder:text-grey-dark;
+  @apply focus:outline-none focus:border-lime focus:ring-2 focus:ring-lime/20;
+  @apply min-h-[44px];
+}
+
+/* Навигация */
+.vs-nav {
+  @apply bg-white border-b border-grey;
+  @apply sticky top-0 z-50 backdrop-blur-sm bg-white/95;
+}
+
+.vs-nav-content {
+  @apply flex items-center justify-between px-4 py-3;
+  @apply max-w-md mx-auto;
+}
+
+.vs-logo {
+  @apply font-mono font-bold text-lg tracking-wider;
+}
+
+.vs-nav-actions {
+  @apply flex items-center gap-2;
+}
+
+.vs-nav-button {
+  @apply w-10 h-10 rounded-lg flex items-center justify-center;
+  @apply text-grey-dark hover:text-black hover:bg-grey-light;
+  @apply transition-colors duration-200;
+}
+
+.vs-nav-button.active {
+  @apply bg-lime text-black;
+}
+
+.vs-badge {
+  @apply absolute -top-1 -right-1 w-5 h-5;
+  @apply bg-black text-white text-xs font-bold;
+  @apply rounded-full flex items-center justify-center;
+}
+
+/* Продукты */
+.vs-product-grid {
+  @apply grid grid-cols-1 gap-4 p-4;
+}
+
+@media (min-width: 640px) {
+  .vs-product-grid {
+    @apply grid-cols-2;
+  }
+}
+
+.vs-product-card {
+  @apply vs-card overflow-hidden;
+}
+
+.vs-product-image {
+  @apply w-full aspect-square bg-grey-light;
+  @apply flex items-center justify-center;
+  @apply border-b border-grey;
+}
+
+.vs-product-content {
+  @apply p-4 space-y-3;
+}
+
+.vs-product-title {
+  @apply font-semibold text-base leading-tight;
+}
+
+.vs-product-description {
+  @apply text-sm text-grey-dark leading-relaxed;
+}
+
+.vs-product-footer {
+  @apply flex items-center justify-between;
+}
+
+.vs-product-price {
+  @apply font-mono font-bold text-lg;
+}
+
+.vs-product-category {
+  @apply text-xs text-grey-dark bg-grey px-2 py-1 rounded;
+}
+
+.vs-product-limited {
+  @apply absolute top-2 right-2;
+  @apply bg-lime text-black text-xs font-bold px-2 py-1 rounded;
+}
+
+/* Корзина */
+.vs-cart-item {
+  @apply vs-card p-4 flex items-center gap-4;
+}
+
+.vs-cart-image {
+  @apply w-16 h-16 bg-grey-light rounded-lg flex-shrink-0;
+  @apply flex items-center justify-center;
+}
+
+.vs-cart-content {
+  @apply flex-1 min-w-0;
+}
+
+.vs-cart-title {
+  @apply font-medium text-sm truncate;
+}
+
+.vs-cart-price {
+  @apply font-mono font-bold text-base text-lime;
+}
+
+.vs-cart-controls {
+  @apply flex items-center gap-2;
+}
+
+.vs-quantity-btn {
+  @apply w-8 h-8 rounded border border-grey;
+  @apply flex items-center justify-center;
+  @apply text-grey-dark hover:text-black hover:border-grey-dark;
+  @apply transition-colors duration-200;
+}
+
+.vs-quantity {
+  @apply font-mono font-medium text-sm w-8 text-center;
+}
+
+/* Профиль */
+.vs-profile-header {
+  @apply vs-card p-6 text-center;
+}
+
+.vs-profile-avatar {
+  @apply w-20 h-20 bg-lime rounded-full mx-auto mb-4;
+  @apply flex items-center justify-center;
+}
+
+.vs-profile-name {
+  @apply font-bold text-xl mb-1;
+}
+
+.vs-profile-username {
+  @apply text-sm text-grey-dark;
+}
+
+.vs-profile-stats {
+  @apply grid grid-cols-2 gap-4 mt-6;
+}
+
+.vs-profile-stat {
+  @apply text-center;
+}
+
+.vs-profile-stat-value {
+  @apply font-mono font-bold text-2xl;
+}
+
+.vs-profile-stat-label {
+  @apply text-xs text-grey-dark uppercase tracking-wider;
+}
+
+/* Заказы */
+.vs-order-item {
+  @apply vs-card p-4 space-y-3;
+}
+
+.vs-order-header {
+  @apply flex justify-between items-start;
+}
+
+.vs-order-id {
+  @apply font-mono font-bold text-sm;
+}
+
+.vs-order-date {
+  @apply text-xs text-grey-dark;
+}
+
+.vs-order-total {
+  @apply font-mono font-bold text-lg text-right;
+}
+
+.vs-order-status {
+  @apply text-xs font-medium px-2 py-1 rounded;
+}
+
+.vs-order-status.completed {
+  @apply bg-lime text-black;
+}
+
+.vs-order-status.processing {
+  @apply bg-grey text-black;
+}
+
+.vs-order-status.pending {
+  @apply bg-grey-light border border-grey-dark text-black;
+}
+
+/* Утилиты */
+.vs-section {
+  @apply max-w-md mx-auto;
+}
+
+.vs-container {
+  @apply px-4 py-6;
+}
+
+.vs-divider {
+  @apply border-t border-grey my-6;
+}
+
+.vs-text-mono {
+  @apply font-mono;
+}
+
+.vs-text-muted {
+  @apply text-grey-dark;
+}
+
+/* Анимации */
+.vs-fade-in {
+  @apply animate-in fade-in duration-300;
+}
+
+.vs-slide-up {
+  @apply animate-in slide-in-from-bottom-4 duration-300;
+}
+
+/* Мобильные оптимизации */
+@media (max-width: 640px) {
+  .vs-nav-content {
+    @apply px-3 py-2;
+  }
+
+  .vs-product-grid {
+    @apply gap-3 p-3;
+  }
+
+  .vs-container {
+    @apply px-3 py-4;
+  }
+}
+
+/* Безопасные зоны iOS */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grey-dark);
+  border-radius: 1px;
+}
+
+/* Выделение */
+::selection {
+  background: var(--lime);
+  color: var(--black);
+}

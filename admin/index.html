@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS_LAB Admin Panel</title>
+    <style>
+        :root {
+            --vs-bg: #f9f9f9;
+            --vs-text: #111111;
+            --vs-accent: #0d6efd;
+            --vs-gray: #666666;
+            --vs-white: #ffffff;
+            --vs-dark: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--vs-bg);
+            color: var(--vs-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--vs-dark);
+            color: var(--vs-white);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--vs-accent), #6610f2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .card {
+            background: var(--vs-white);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--vs-text);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--vs-text);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--vs-accent);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--vs-accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: var(--vs-gray);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--vs-text);
+        }
+
+        .table img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-limited {
+            background: #cce7ff;
+            color: #0066cc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--vs-white);
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--vs-gray);
+        }
+
+        .close:hover {
+            color: var(--vs-text);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--vs-gray);
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 12px;
+            }
+            
+            .table img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">VS</div>
+                <div>
+                    <h1>VS_LAB Admin Panel</h1>
+                    <p style="opacity: 0.8; font-size: 14px;">Лаборатория Архитектурных Решений</p>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Статистика -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Статистика</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <h3 id="totalProducts">0</h3>
+                    <p>Товаров</p>
+                </div>
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <h3 id="activeProducts">0</h3>
+                    <p>Активных</p>
+                </div>
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <h3 id="limitedProducts">0</h3>
+                    <p>Лимитированных</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма добавления товара -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Добавить новый товар</h2>
+            </div>
+            
+            <div id="message"></div>
+            
+            <form id="productForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Название товара *</label>
+                        <input type="text" class="form-input" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Цена (₽) *</label>
+                        <input type="number" class="form-input" id="price" required min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Описание *</label>
+                    <textarea class="form-textarea" id="description" required></textarea>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">URL изображения</label>
+                        <input type="url" class="form-input" id="image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Категория</label>
+                        <select class="form-select" id="category">
+                            <option value="Инструменты">Инструменты</option>
+                            <option value="Знания">Знания</option>
+                            <option value="Решения">Решения</option>
+                            <option value="Коллекции">Коллекции</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Характеристики (JSON формат)</label>
+                    <textarea class="form-textarea" id="characteristics" placeholder='{"материал": "бумага", "размер": "A4", "страниц": 120}'></textarea>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Количество в наличии</label>
+                        <input type="number" class="form-input" id="stock" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Лимит на пользователя</label>
+                        <input type="number" class="form-input" id="userLimit" min="1" max="5" value="5">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="limited">
+                    <label for="limited">Лимитированная серия</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="active" checked>
+                    <label for="active">Активный товар</label>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <button type="submit" class="btn btn-primary">Добавить товар</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Очистить</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Список товаров -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Все товары</h2>
+            </div>
+            
+            <div class="loading" id="loading">Загрузка товаров...</div>
+            
+            <div style="overflow-x: auto;">
+                <table class="table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Изображение</th>
+                            <th>Название</th>
+                            <th>Цена</th>
+                            <th>Категория</th>
+                            <th>Наличие</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Редактировать товар</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Название товара *</label>
+                            <input type="text" class="form-input" id="editName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Цена (₽) *</label>
+                            <input type="number" class="form-input" id="editPrice" required min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Описание *</label>
+                        <textarea class="form-textarea" id="editDescription" required></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">URL изображения</label>
+                            <input type="url" class="form-input" id="editImage">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Категория</label>
+                            <select class="form-select" id="editCategory">
+                                <option value="Инструменты">Инструменты</option>
+                                <option value="Знания">Знания</option>
+                                <option value="Решения">Решения</option>
+                                <option value="Коллекции">Коллекции</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Характеристики (JSON)</label>
+                        <textarea class="form-textarea" id="editCharacteristics"></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Количество в наличии</label>
+                            <input type="number" class="form-input" id="editStock" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Лимит на пользователя</label>
+                            <input type="number" class="form-input" id="editUserLimit" min="1" max="5">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="editLimited">
+                        <label for="editLimited">Лимитированная серия</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="editActive">
+                        <label for="editActive">Активный товар</label>
+                    </div>
+
+                    <div style="margin-top: 24px;">
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api';
+        let currentEditId = null;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            
+            document.getElementById('productForm').addEventListener('submit', handleAddProduct);
+            document.getElementById('editForm').addEventListener('submit', handleEditProduct);
+        });
+
+        // Загрузка товаров
+        async function loadProducts() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                
+                const response = await fetch(`${API_BASE}/admin/products`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'admin_token'}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки товаров');
+                }
+
+                const products = await response.json();
+                renderProducts(products);
+                updateStatistics(products);
+                
+            } catch (error) {
+                showMessage('Ошибка загрузки товаров: ' + error.message, 'error');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Отображение товаров
+        function renderProducts(products) {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <img src="${product.image || '/placeholder.svg?height=60&width=60'}" 
+                             alt="${product.name}" 
+                             onerror="this.src='/placeholder.svg?height=60&width=60'">
+                    </td>
+                    <td>
+                        <strong>${product.name}</strong><br>
+                        <small style="color: var(--vs-gray);">${product.description.substring(0, 50)}...</small>
+                    </td>
+                    <td><strong>${product.price.toLocaleString()} ₽</strong></td>
+                    <td><span class="status-badge status-active">${product.category}</span></td>
+                    <td>${product.stock || 0} шт.</td>
+                    <td>
+                        ${product.active ? '<span class="status-badge status-active">Активен</span>' : '<span class="status-badge">Неактивен</span>'}
+                        ${product.limited ? '<span class="status-badge status-limited">LIMITED</span>' : ''}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-primary btn-small" onclick="editProduct(${product.id})">
+                                Редактировать
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteProduct(${product.id})">
+                                Удалить
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Обновление статистики
+        function updateStatistics(products) {
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('activeProducts').textContent = products.filter(p => p.active).length;
+            document.getElementById('limitedProducts').textContent = products.filter(p => p.limited).length;
+        }
+
+        // Добавление товара
+        async function handleAddProduct(e) {
+            e.preventDefault();
+            
+            try {
+                const formData = getFormData();
+                
+                const response = await fetch(`${API_BASE}/admin/product`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'admin_token'}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка добавления товара');
+                }
+
+                showMessage('Товар успешно добавлен!', 'success');
+                resetForm();
+                loadProducts();
+                
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+
+        // Получение данных формы
+        function getFormData() {
+            let characteristics = {};
+            try {
+                const charText = document.getElementById('characteristics').value.trim();
+                if (charText) {
+                    characteristics = JSON.parse(charText);
+                }
+            } catch (e) {
+                characteristics = {};
+            }
+
+            return {
+                name: document.getElementById('name').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                price: parseFloat(document.getElementById('price').value),
+                image: document.getElementById('image').value.trim(),
+                category: document.getElementById('category').value,
+                characteristics: characteristics,
+                stock: parseInt(document.getElementById('stock').value) || 0,
+                userLimit: parseInt(document.getElementById('userLimit').value) || 5,
+                limited: document.getElementById('limited').checked,
+                active: document.getElementById('active').checked
+            };
+        }
+
+        // Редактирование товара
+        async function editProduct(id) {
+            try {
+                const response = await fetch(`${API_BASE}/admin/products`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'admin_token'}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки товара');
+                }
+
+                const products = await response.json();
+                const product = products.find(p => p.id === id);
+
+                if (!product) {
+                    throw new Error('Товар не найден');
+                }
+
+                // Заполнение формы редактирования
+                document.getElementById('editId').value = product.id;
+                document.getElementById('editName').value = product.name;
+                document.getElementById('editDescription').value = product.description;
+                document.getElementById('editPrice').value = product.price;
+                document.getElementById('editImage').value = product.image || '';
+                document.getElementById('editCategory').value = product.category;
+                document.getElementById('editCharacteristics').value = JSON.stringify(product.characteristics || {}, null, 2);
+                document.getElementById('editStock').value = product.stock || 0;
+                document.getElementById('editUserLimit').value = product.userLimit || 5;
+                document.getElementById('editLimited').checked = product.limited || false;
+                document.getElementById('editActive').checked = product.active !== false;
+
+                document.getElementById('editModal').style.display = 'block';
+                
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+
+        // Сохранение изменений
+        async function handleEditProduct(e) {
+            e.preventDefault();
+            
+            try {
+                const id = document.getElementById('editId').value;
+                const formData = getEditFormData();
+                
+                const response = await fetch(`${API_BASE}/admin/product/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'admin_token'}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка обновления товара');
+                }
+
+                showMessage('Товар успешно обновлен!', 'success');
+                closeEditModal();
+                loadProducts();
+                
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+
+        // Получение данных формы редактирования
+        function getEditFormData() {
+            let characteristics = {};
+            try {
+                const charText = document.getElementById('editCharacteristics').value.trim();
+                if (charText) {
+                    characteristics = JSON.parse(charText);
+                }
+            } catch (e) {
+                characteristics = {};
+            }
+
+            return {
+                name: document.getElementById('editName').value.trim(),
+                description: document.getElementById('editDescription').value.trim(),
+                price: parseFloat(document.getElementById('editPrice').value),
+                image: document.getElementById('editImage').value.trim(),
+                category: document.getElementById('editCategory').value,
+                characteristics: characteristics,
+                stock: parseInt(document.getElementById('editStock').value) || 0,
+                userLimit: parseInt(document.getElementById('editUserLimit').value) || 5,
+                limited: document.getElementById('editLimited').checked,
+                active: document.getElementById('editActive').checked
+            };
+        }
+
+        // Удаление товара
+        async function deleteProduct(id) {
+            if (!confirm('Вы уверены, что хотите удалить этот товар?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/product/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'admin_token'}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка удаления товара');
+                }
+
+                showMessage('Товар успешно удален!', 'success');
+                loadProducts();
+                
+            } catch (error) {
+                showMessage('Ошибка: ' + error.message, 'error');
+            }
+        }
+
+        // Утилиты
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('active').checked = true;
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = type;
+            messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function logout() {
+            if (confirm('Выйти из админ-панели?')) {
+                localStorage.removeItem('admin_token');
+                window.location.href = '/';
+            }
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+    </script>
+</body>
+</html>
